@@ -1,0 +1,375 @@
+/* ============================================================
+   CAFE REWARDS INTELLIGENCE PLATFORM — Premium CSS Theme
+   ============================================================ */
+
+/* ── Fonts ── */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;600&display=swap');
+
+/* ── Color Tokens ── */
+:root {
+    --coffee:     #3B1F0E;
+    --espresso:   #1A0A03;
+    --latte:      #C8A97A;
+    --cream:      #FAF3E7;
+    --gold:       #D4A843;
+    --gold-light: #F0C96A;
+    --green:      #1C4A2E;
+    --green-light:#2D6E45;
+    --text-dark:  #1A1A2E;
+    --text-muted: #6B6B6B;
+    --glass-bg:   rgba(255,255,255,0.07);
+    --glass-brd:  rgba(212,168,67,0.25);
+    --shadow-lg:  0 20px 60px rgba(59,31,14,0.18);
+    --shadow-md:  0 8px 30px rgba(59,31,14,0.12);
+    --radius-xl:  20px;
+    --radius-lg:  14px;
+    --radius-md:  10px;
+}
+
+/* ── Global reset ── */
+html, body, [class*="css"] {
+    font-family: 'Lato', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif !important;
+}
+
+/* ── App background with SVG coffee bean pattern ── */
+.stApp {
+    background-color: #0D0604 !important;
+    background-image:
+        /* Radial glow top-left */
+        radial-gradient(ellipse 60% 40% at 15% 20%, rgba(59,31,14,0.85) 0%, transparent 65%),
+        /* Radial glow bottom-right green tint */
+        radial-gradient(ellipse 50% 40% at 85% 80%, rgba(28,74,46,0.5) 0%, transparent 60%),
+        /* Coffee ring watermark — large faint ring top-right */
+        radial-gradient(circle 220px at 78% 12%, transparent 170px, rgba(212,168,67,0.055) 171px, rgba(212,168,67,0.055) 178px, transparent 179px),
+        /* Coffee ring 2 — overlapping, lighter */
+        radial-gradient(circle 180px at 83% 16%, transparent 138px, rgba(200,169,122,0.04) 139px, rgba(200,169,122,0.04) 144px, transparent 145px),
+        /* Coffee ring 3 — bottom left */
+        radial-gradient(circle 260px at 8% 88%, transparent 210px, rgba(212,168,67,0.04) 211px, rgba(212,168,67,0.04) 218px, transparent 219px),
+        /* Coffee ring 4 — smaller, mid-right */
+        radial-gradient(circle 120px at 92% 52%, transparent 92px, rgba(200,169,122,0.05) 93px, rgba(200,169,122,0.05) 97px, transparent 98px),
+        /* Subtle grain-like noise via repeating gradient */
+        repeating-linear-gradient(
+            47deg,
+            transparent,
+            transparent 120px,
+            rgba(59,31,14,0.03) 120px,
+            rgba(59,31,14,0.03) 121px
+        ),
+        repeating-linear-gradient(
+            -31deg,
+            transparent,
+            transparent 90px,
+            rgba(28,74,46,0.025) 90px,
+            rgba(28,74,46,0.025) 91px
+        ),
+        /* Base gradient */
+        linear-gradient(150deg, #100804 0%, #1A0A03 25%, #0F1B10 65%, #061008 100%);
+    min-height: 100vh;
+}
+
+/* ── Hide Streamlit chrome ── */
+#MainMenu, footer, header { visibility: hidden !important; }
+.stDeployButton { display: none !important; }
+
+/* ── Sidebar ── */
+section[data-testid="stSidebar"] {
+    background:
+        radial-gradient(circle 160px at 110% 15%, rgba(212,168,67,0.06) 0%, transparent 70%),
+        radial-gradient(circle 200px at -20% 85%, rgba(28,74,46,0.12) 0%, transparent 70%),
+        linear-gradient(180deg, #1A0A03 0%, #0D1A0E 100%) !important;
+    border-right: 1px solid var(--glass-brd) !important;
+}
+section[data-testid="stSidebar"] * {
+    color: #E8D5B0 !important;
+}
+section[data-testid="stSidebar"] .stSelectbox label,
+section[data-testid="stSidebar"] .stMultiSelect label {
+    color: var(--gold) !important;
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+section[data-testid="stSidebar"] [data-baseweb="select"] {
+    background: rgba(255,255,255,0.06) !important;
+    border: 1px solid var(--glass-brd) !important;
+    border-radius: var(--radius-md) !important;
+}
+
+/* ── Hero Section ── */
+.hero-container {
+    background:
+        /* Coffee steam wisps */
+        radial-gradient(ellipse 30% 60% at 12% 0%, rgba(212,168,67,0.07) 0%, transparent 55%),
+        radial-gradient(ellipse 20% 40% at 18% 5%, rgba(200,169,122,0.05) 0%, transparent 45%),
+        /* Coffee ring accent inside hero */
+        radial-gradient(circle 140px at 92% 80%, transparent 110px, rgba(212,168,67,0.08) 111px, rgba(212,168,67,0.08) 116px, transparent 117px),
+        radial-gradient(circle 100px at 88% 75%, transparent 76px, rgba(200,169,122,0.06) 77px, rgba(200,169,122,0.06) 80px, transparent 81px),
+        /* Main hero gradient */
+        linear-gradient(135deg, rgba(59,31,14,0.97) 0%, rgba(28,74,46,0.88) 55%, rgba(26,10,3,0.99) 100%);
+    border-radius: var(--radius-xl);
+    padding: 3.5rem 3rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--glass-brd);
+    box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(212,168,67,0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Hero — decorative coffee bean SVG shapes via pseudo-elements */
+.hero-container::before {
+    content: "";
+    position: absolute;
+    top: -30px; right: -30px;
+    width: 220px; height: 220px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cellipse cx='100' cy='100' rx='60' ry='90' fill='none' stroke='rgba(212,168,67,0.07)' stroke-width='1.5'/%3E%3Cellipse cx='100' cy='100' rx='48' ry='78' fill='none' stroke='rgba(212,168,67,0.05)' stroke-width='1'/%3E%3Cpath d='M100 10 Q130 100 100 190' fill='none' stroke='rgba(212,168,67,0.06)' stroke-width='1'/%3E%3Ccircle cx='100' cy='100' r='90' fill='none' stroke='rgba(212,168,67,0.04)' stroke-width='0.8'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    opacity: 0.9;
+    transform: rotate(25deg);
+}
+.hero-container::after {
+    content: "";
+    position: absolute;
+    bottom: -40px; left: 40px;
+    width: 160px; height: 160px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160'%3E%3Cellipse cx='80' cy='80' rx='45' ry='68' fill='none' stroke='rgba(200,169,122,0.06)' stroke-width='1.2'/%3E%3Cpath d='M80 12 Q108 80 80 148' fill='none' stroke='rgba(200,169,122,0.05)' stroke-width='1'/%3E%3Ccircle cx='80' cy='80' r='70' fill='none' stroke='rgba(200,169,122,0.035)' stroke-width='0.8'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    transform: rotate(-15deg);
+}
+
+.hero-badge {
+    display: inline-block;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    color: var(--coffee);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 100px;
+    margin-bottom: 1rem;
+}
+.hero-title {
+    font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 700;
+    color: #FFFFFF;
+    line-height: 1.15;
+    margin: 0 0 0.6rem;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.4);
+}
+.hero-title span { color: var(--gold-light); }
+.hero-sub {
+    font-size: 1rem;
+    color: rgba(232,213,176,0.75);
+    font-weight: 300;
+    letter-spacing: 0.03em;
+    margin-bottom: 1.5rem;
+}
+.hero-stat {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(212,168,67,0.2);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 0.78rem;
+    color: var(--latte);
+    margin-right: 10px;
+}
+
+/* ── Section Titles ── */
+.section-title {
+    font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin-bottom: 0.25rem;
+}
+.section-sub {
+    font-size: 0.82rem;
+    color: rgba(200,169,122,0.65);
+    margin-bottom: 1.25rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+.divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--gold) 0%, transparent 80%);
+    margin: 0.5rem 0 1.5rem;
+}
+
+/* ── KPI Cards ── */
+.kpi-card {
+    background:
+        radial-gradient(circle 80px at 90% 10%, rgba(212,168,67,0.06) 0%, transparent 60%),
+        linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+    border: 1px solid rgba(212,168,67,0.22);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem 1.5rem 1.25rem;
+    text-align: center;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(12px);
+}
+.kpi-card::after {
+    content: "";
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gold), var(--green-light));
+    border-radius: 2px 2px 0 0;
+}
+.kpi-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(212,168,67,0.15);
+    border-color: rgba(212,168,67,0.5);
+}
+.kpi-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+.kpi-value {
+    font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--gold-light);
+    line-height: 1.1;
+    margin-bottom: 0.25rem;
+}
+.kpi-label {
+    font-size: 0.72rem;
+    color: rgba(200,169,122,0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 500;
+}
+.kpi-delta {
+    font-size: 0.72rem;
+    color: #5DD990;
+    margin-top: 0.4rem;
+    font-weight: 500;
+}
+
+/* ── Glass Panel ── */
+.glass-panel {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(212,168,67,0.15);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+    backdrop-filter: blur(8px);
+}
+
+/* ── Insight Cards ── */
+.insight-card {
+    background:
+        radial-gradient(circle 60px at 95% 5%, rgba(93,217,144,0.04) 0%, transparent 60%),
+        linear-gradient(135deg, rgba(28,74,46,0.3), rgba(26,10,3,0.4));
+    border: 1px solid rgba(93,217,144,0.25);
+    border-radius: var(--radius-lg);
+    padding: 1.1rem 1.25rem;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+.insight-card.warning {
+    background: linear-gradient(135deg, rgba(74,44,10,0.3), rgba(26,10,3,0.4));
+    border-color: rgba(240,201,106,0.3);
+}
+.insight-card.info {
+    background: linear-gradient(135deg, rgba(14,48,80,0.3), rgba(26,10,3,0.4));
+    border-color: rgba(100,180,240,0.25);
+}
+.insight-icon { font-size: 1.4rem; flex-shrink: 0; }
+.insight-text { font-size: 0.88rem; color: rgba(232,213,176,0.9); line-height: 1.55; }
+.insight-title { font-weight: 600; color: #FFFFFF; margin-bottom: 2px; }
+
+/* ── Recommendation Cards ── */
+.rec-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(212,168,67,0.15);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.2rem;
+    margin-bottom: 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: background 0.2s ease;
+}
+.rec-card:hover { background: rgba(255,255,255,0.07); }
+.rec-num {
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: var(--coffee);
+    font-weight: 700;
+    font-size: 0.75rem;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+}
+.rec-text { font-size: 0.85rem; color: rgba(232,213,176,0.88); line-height: 1.45; }
+.rec-text strong { color: #FFFFFF; }
+
+/* ── Plotly chart container ── */
+.js-plotly-plot { border-radius: var(--radius-lg) !important; }
+
+/* ── Sidebar logo area ── */
+.sidebar-logo {
+    text-align: center;
+    padding: 1.5rem 0 1rem;
+    border-bottom: 1px solid rgba(212,168,67,0.15);
+    margin-bottom: 1.5rem;
+}
+.sidebar-logo h2 {
+    font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    font-size: 1.1rem;
+    color: var(--gold-light) !important;
+    margin: 0.4rem 0 0.1rem;
+}
+.sidebar-logo p { font-size: 0.68rem; color: rgba(200,169,122,0.55) !important; letter-spacing: 0.12em; }
+
+/* ── Metric override ── */
+[data-testid="stMetricValue"] {
+    color: var(--gold-light) !important;
+    font-family: 'Playfair Display', Georgia, 'Times New Roman', serif !important;
+}
+
+/* ── Coffee ring decorative overlay — injected via Streamlit HTML ── */
+.coffee-ring-deco {
+    position: fixed;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(212,168,67,0.3); border-radius: 3px; }
+
+/* ── Coffee ring stain decorations (fixed, behind content) ── */
+.stApp::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image:
+        /* Top-right large coffee ring stain */
+        radial-gradient(circle 190px at 91% 8%,  transparent 148px, rgba(212,168,67,0.07) 149px, rgba(212,168,67,0.07) 157px, transparent 158px),
+        radial-gradient(circle 160px at 87% 11%, transparent 124px, rgba(200,169,122,0.05) 125px, rgba(200,169,122,0.05) 130px, transparent 131px),
+        /* Bottom-left ring */
+        radial-gradient(circle 230px at 5% 93%,  transparent 185px, rgba(212,168,67,0.055) 186px, rgba(212,168,67,0.055) 193px, transparent 194px),
+        /* Mid-page subtle ring */
+        radial-gradient(circle 110px at 95% 48%, transparent 86px,  rgba(200,169,122,0.045) 87px, rgba(200,169,122,0.045) 91px, transparent 92px),
+        /* Very faint overall coffee wash */
+        radial-gradient(ellipse 80% 50% at 50% 50%, rgba(59,31,14,0.06) 0%, transparent 70%);
+}
