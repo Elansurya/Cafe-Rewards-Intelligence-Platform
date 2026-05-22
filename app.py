@@ -1,9 +1,3 @@
-"""
-╔══════════════════════════════════════════════════════════════╗
-║  CAFE REWARDS INTELLIGENCE PLATFORM — app.py                ║
-║  Customer Behavior & Campaign Analytics Dashboard           ║
-╚══════════════════════════════════════════════════════════════╝
-"""
 import sys, os, base64
 from io import BytesIO
 
@@ -21,7 +15,6 @@ from plotly.subplots import make_subplots
 
 from utils.data_loader import load_and_process_data
 
-# ── PAGE CONFIG ────────────────────────────────────────────────
 st.set_page_config(
     page_title="Cafe Rewards Intelligence Platform",
     page_icon="☕",
@@ -29,13 +22,12 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ── LOAD CSS ───────────────────────────────────────────────────
+
 css_path = os.path.join(APP_DIR, "style.css")
 if os.path.exists(css_path):
     with open(css_path) as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-# ── COFFEE IMAGE HELPER ────────────────────────────────────────
 # Fetch coffee images and embed as base64 so CSP never blocks them.
 # Falls back to a pure-CSS/SVG placeholder if requests is unavailable.
 
@@ -88,7 +80,6 @@ def coffee_img_tag(b64: str | None, alt: str, style: str = "") -> str:
         return f'<img src="{b64}" alt="{alt}" style="{style}" />'
     return ""  # hide if unavailable
 
-# ── PLOTLY THEME ───────────────────────────────────────────────
 CHART_THEME = dict(
     plot_bgcolor="rgba(0,0,0,0)",
     paper_bgcolor="rgba(0,0,0,0)",
@@ -120,7 +111,6 @@ def apply_theme(fig, title="", height=360):
     )
     return fig
 
-# ── DATA LOAD ──────────────────────────────────────────────────
 with st.spinner("Brewing your insights ☕..."):
     data = load_and_process_data()
 
@@ -136,7 +126,6 @@ cust_trans   = data["cust_trans"]
 funnel_df    = data["funnel"]
 rev_time     = data["rev_time"]
 
-# ── SIDEBAR — FILTERS ─────────────────────────────────────────
 with st.sidebar:
     # Sidebar logo + small coffee cup image
     cup_img = coffee_img_tag(
@@ -183,7 +172,7 @@ with st.sidebar:
     </div>
     """, unsafe_allow_html=True)
 
-# ── APPLY FILTERS ─────────────────────────────────────────────
+# ── APPLY FILTERS 
 def filter_journey(jdf):
     df = jdf.copy()
     if sel_offer  != "All": df = df[df["offer_type"] == sel_offer]
@@ -202,9 +191,8 @@ filt_cust         = jdf["customer_id"].nunique()
 filt_tx           = len(filt_transactions)
 filt_comp         = jdf["was_completed"].mean() * 100 if len(jdf) else 0
 
-# ══════════════════════════════════════════════════════════════
 # SECTION 1 — HERO  (now with REAL coffee background image)
-# ══════════════════════════════════════════════════════════════
+
 st.markdown(f"""
 <div style="{hero_bg_style(imgs['hero'])}
      border: 1px solid rgba(212,168,67,0.28);
@@ -288,9 +276,7 @@ if imgs["beans"] or imgs["cup"] or imgs["hero"]:
         </div>""", unsafe_allow_html=True)
     st.markdown("<br>", unsafe_allow_html=True)
 
-# ══════════════════════════════════════════════════════════════
 # SECTION 2 — KPI CARDS
-# ══════════════════════════════════════════════════════════════
 st.markdown("""
 <h3 style="color:#D4A843; margin-bottom:0; font-family:Georgia,serif;">Executive KPIs</h3>
 <p style="color:#C8A97A; font-size:0.85rem; margin-top:2px;">Real-time performance metrics</p>
@@ -322,9 +308,9 @@ kpi_card(c4, "✅", f"{filt_comp:.1f}%",         "Completion Rate",     "Offer f
 kpi_card(c5, "👁️", f"{view_rate:.1f}%",         "View Rate",           "Offer engagement")
 st.markdown("<br>", unsafe_allow_html=True)
 
-# ══════════════════════════════════════════════════════════════
+
 # SECTION 3 — CONVERSION FUNNEL + REVENUE OVER TIME
-# ══════════════════════════════════════════════════════════════
+
 st.markdown("""
 <h3 style="color:#D4A843; margin-bottom:0; font-family:Georgia,serif;">Customer Conversion Funnel</h3>
 <p style="color:#C8A97A; font-size:0.85rem; margin-top:2px;">Journey from offer receipt to transaction</p>
@@ -380,9 +366,7 @@ with col_rev:
     rev_fig.update_layout(xaxis_title="Campaign Week", yaxis_title="Revenue ($)", showlegend=True)
     st.plotly_chart(rev_fig, use_container_width=True)
 
-# ══════════════════════════════════════════════════════════════
 # SECTION 4 — OFFER PERFORMANCE
-# ══════════════════════════════════════════════════════════════
 st.markdown("""
 <h3 style="color:#D4A843; margin-bottom:0; font-family:Georgia,serif;">Offer Performance Analysis</h3>
 <p style="color:#C8A97A; font-size:0.85rem; margin-top:2px;">Breakdown by offer type & engagement metrics</p>
@@ -449,9 +433,8 @@ op_filtered["completion_rate"] = (op_filtered["completed"] / op_filtered["receiv
 op_filtered.columns = ["Offer Type","Received","Viewed","Completed","View Rate %","Completion Rate %"]
 st.dataframe(op_filtered, use_container_width=True, hide_index=True)
 
-# ══════════════════════════════════════════════════════════════
 # SECTION 5 — CUSTOMER ANALYTICS
-# ══════════════════════════════════════════════════════════════
+
 st.markdown("<br>", unsafe_allow_html=True)
 st.markdown("""
 <h3 style="color:#D4A843; margin-bottom:0; font-family:Georgia,serif;">Customer Analytics</h3>
@@ -533,9 +516,7 @@ scatter_fig.update_traces(marker_line=dict(width=0.5, color="rgba(0,0,0,0.4)"))
 scatter_fig.update_layout(xaxis_tickprefix="$", yaxis_tickprefix="$", legend_title_text="Segment")
 st.plotly_chart(scatter_fig, use_container_width=True)
 
-# ══════════════════════════════════════════════════════════════
 # SECTION 6 — CHANNEL ANALYTICS
-# ══════════════════════════════════════════════════════════════
 st.markdown("<br>", unsafe_allow_html=True)
 st.markdown("""
 <h3 style="color:#D4A843; margin-bottom:0; font-family:Georgia,serif;">Marketing Channel Analytics</h3>
@@ -584,9 +565,8 @@ with col_ch2:
     ch_pie.update_layout(showlegend=False)
     st.plotly_chart(ch_pie, use_container_width=True)
 
-# ══════════════════════════════════════════════════════════════
 # SECTION 7 — AI BUSINESS INSIGHTS
-# ══════════════════════════════════════════════════════════════
+
 st.markdown("<br>", unsafe_allow_html=True)
 st.markdown("""
 <h3 style="color:#D4A843; margin-bottom:0; font-family:Georgia,serif;">AI Business Insights</h3>
@@ -646,9 +626,8 @@ with icol2:
             f"<b>{worst_comp_rate:.1f}%</b>. Consider revising reward structures or delivery channels.", "info"),
         unsafe_allow_html=True)
 
-# ══════════════════════════════════════════════════════════════
 # SECTION 8 — STRATEGIC RECOMMENDATIONS
-# ══════════════════════════════════════════════════════════════
+
 st.markdown("<br>", unsafe_allow_html=True)
 st.markdown("""
 <h3 style="color:#D4A843; margin-bottom:0; font-family:Georgia,serif;">Strategic Recommendations</h3>
@@ -691,9 +670,8 @@ for i, (title, body) in enumerate(recommendations, 1):
       </div>
     </div>""", unsafe_allow_html=True)
 
-# ══════════════════════════════════════════════════════════════
 # FOOTER
-# ══════════════════════════════════════════════════════════════
+
 st.markdown("<br>", unsafe_allow_html=True)
 
 # Footer with small coffee image if available
