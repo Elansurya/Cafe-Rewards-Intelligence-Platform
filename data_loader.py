@@ -1,17 +1,10 @@
-"""
-utils/data_loader.py
-Generates all required synthetic data — no CSV files needed.
-"""
-
 import numpy as np
 import pandas as pd
 import streamlit as st
 
 RNG = np.random.default_rng(42)
 
-# ─────────────────────────────────────────────────
 # CONSTANTS
-# ─────────────────────────────────────────────────
 N_CUSTOMERS  = 17_000
 N_OFFERS     = 10
 OFFER_TYPES  = ["bogo", "discount", "informational"]
@@ -22,16 +15,13 @@ INCOME_BINS  = [0, 40_000, 60_000, 80_000, 100_000, 120_000, 200_000]
 INCOME_LABELS= ["<40K", "40-60K", "60-80K", "80-100K", "100-120K", "120K+"]
 GENDERS      = ["M", "F", "O"]
 
-# ─────────────────────────────────────────────────
 # HELPER — reproducible choice
-# ─────────────────────────────────────────────────
+
 def choice(arr, size, p=None):
     return RNG.choice(arr, size=size, p=p)
 
 
-# ─────────────────────────────────────────────────
 # BUILD CUSTOMERS
-# ─────────────────────────────────────────────────
 def _make_customers():
     age    = RNG.integers(18, 85, size=N_CUSTOMERS)
     income = RNG.normal(65_000, 25_000, size=N_CUSTOMERS).clip(15_000, 200_000)
@@ -49,10 +39,8 @@ def _make_customers():
     df["income_group"] = pd.cut(df["income"], bins=INCOME_BINS, labels=INCOME_LABELS, right=False)
     return df
 
-
-# ─────────────────────────────────────────────────
 # BUILD OFFERS
-# ─────────────────────────────────────────────────
+
 def _make_offers():
     rows = []
     for oid in range(N_OFFERS):
@@ -72,9 +60,8 @@ def _make_offers():
     return pd.DataFrame(rows)
 
 
-# ─────────────────────────────────────────────────
 # BUILD JOURNEY  (offer-level events per customer)
-# ─────────────────────────────────────────────────
+
 def _make_journey(customers, offers):
     # Each customer receives ~2-4 offers
     n_rows = N_CUSTOMERS * 3
@@ -126,10 +113,8 @@ def _make_journey(customers, offers):
     })
     return journey
 
-
-# ─────────────────────────────────────────────────
 # BUILD TRANSACTIONS
-# ─────────────────────────────────────────────────
+
 def _make_transactions(customers):
     # ~15 transactions per active customer; 20% never transact
     active_mask = RNG.random(N_CUSTOMERS) > 0.20
@@ -146,10 +131,8 @@ def _make_transactions(customers):
         "week":        week,
     })
 
-
-# ─────────────────────────────────────────────────
 # CHANNEL DF
-# ─────────────────────────────────────────────────
+
 def _make_channel_df(journey):
     rows = []
     for ch in CHANNELS:
@@ -165,10 +148,8 @@ def _make_channel_df(journey):
         })
     return pd.DataFrame(rows)
 
-
-# ─────────────────────────────────────────────────
 # CUSTOMER TRANSACTION SUMMARY
-# ─────────────────────────────────────────────────
+
 def _make_cust_trans(customers, transactions):
     tx_agg = transactions.groupby("customer_id").agg(
         total_spend    =("amount", "sum"),
@@ -189,20 +170,14 @@ def _make_cust_trans(customers, transactions):
     )
     return ct
 
-
-# ─────────────────────────────────────────────────
 # REVENUE OVER TIME
-# ─────────────────────────────────────────────────
 def _make_rev_time(transactions):
     rt = transactions.groupby("week")["amount"].sum().reset_index()
     rt.columns = ["week", "revenue"]
     rt = rt.sort_values("week").reset_index(drop=True)
     return rt
 
-
-# ─────────────────────────────────────────────────
 # TYPE PERFORMANCE
-# ─────────────────────────────────────────────────
 def _make_type_perf(journey):
     tp = journey.groupby("offer_type").agg(
         received       =("customer_id", "count"),
@@ -213,10 +188,8 @@ def _make_type_perf(journey):
     tp["completion_rate"] = tp["completed"] / tp["received"] * 100
     return tp
 
-
-# ─────────────────────────────────────────────────
 # OFFER PERFORMANCE (per offer_id)
-# ─────────────────────────────────────────────────
+
 def _make_offer_perf(journey):
     op = journey.groupby("offer_id").agg(
         received  =("customer_id","count"),
@@ -226,11 +199,8 @@ def _make_offer_perf(journey):
     op["view_rate"]       = op["viewed"]    / op["received"] * 100
     op["completion_rate"] = op["completed"] / op["received"] * 100
     return op
-
-
-# ─────────────────────────────────────────────────
 # FUNNEL DF
-# ─────────────────────────────────────────────────
+
 def _make_funnel(journey, transactions):
     return pd.DataFrame({
         "stage": ["Offer Received","Offer Viewed","Offer Completed","Transaction Made"],
@@ -243,9 +213,8 @@ def _make_funnel(journey, transactions):
     })
 
 
-# ─────────────────────────────────────────────────
 # GLOBAL KPIs
-# ─────────────────────────────────────────────────
+
 def _make_kpis(customers, journey, transactions, cust_trans):
     return {
         "total_revenue":    transactions["amount"].sum(),
@@ -258,9 +227,8 @@ def _make_kpis(customers, journey, transactions, cust_trans):
     }
 
 
-# ─────────────────────────────────────────────────
 # MAIN ENTRY POINT  (cached)
-# ─────────────────────────────────────────────────
+
 @st.cache_data(show_spinner=False)
 def load_and_process_data():
     customers    = _make_customers()
